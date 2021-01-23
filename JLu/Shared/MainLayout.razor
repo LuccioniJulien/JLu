@@ -1,0 +1,29 @@
+﻿@inherits LayoutComponentBase
+
+@if (_isDarkTheme)
+{
+    <link href="css/bulma-dark.css" rel="stylesheet"/>
+}
+else
+{
+    <link href="css/bulma-light.css" rel="stylesheet"/>
+}
+
+<div class="columns">
+    <div class="column is-2">
+    </div>
+    <div class="column">
+        <br/>
+        <NavMenu/>
+        <br/>
+        @Body
+    </div>
+    <div class="column is-2">
+    </div>
+</div>
+
+@code {
+    private bool _isDarkTheme = true;
+
+    private void SwitchTheme() => _isDarkTheme = !_isDarkTheme;
+}
