@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using dotenv.net.DependencyInjection.Microsoft;
+using JLu.DAO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using JLu.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace JLu
 {
@@ -30,19 +32,31 @@ namespace JLu
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
-            
-            services.AddEnv(builder => {
+
+            services.AddEnv(builder =>
+            {
                 builder
                     .AddEnvFile("./.ENV")
                     .AddThrowOnError(false)
                     .AddEncoding(Encoding.ASCII);
             });
+
+            // dbb
+            var urlDb = Environment.GetEnvironmentVariable("URLDB");
+            services.AddDbContext<PFContext>(options =>
+                options.UseNpgsql(urlDb));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<PFContext>();
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
