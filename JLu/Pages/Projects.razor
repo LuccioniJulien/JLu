@@ -3,7 +3,7 @@
 @inject NavigationManager NavManager
 
 
-<div class="@_classes">
+<div class=" animate__animated @_classes">
     <ProjectCard Goto="Goto"/>
 </div>
 
@@ -26,29 +26,27 @@
 }
 
 @code {
-    string _classes = "animate__animated animate__bounceIn";
+    string _classes = "animate__bounceIn";
     string _id;
     string _classesBack = "animate__bounceInRight";
 
     async void Goto()
     {
-        _classes = "animate__animated animate__bounceOut";
+        _classes = "animate__bounceOut";
         await Task.Delay(500);
         _classes = "is-hidden";
         _id = "ok";
         StateHasChanged();
-    //      NavManager.NavigateTo("/Detail");
     }
 
     async void BackTo()
     {
         _classesBack = "animate__bounceOutRight";
         await Task.Delay(500);
-        _classes = "animate__animated animate__bounceIn";
+        _classes = "animate__bounceIn";
         _id = null;
         _classesBack = "animate__bounceInRight";
         StateHasChanged();
-    //      NavManager.NavigateTo("/Detail");
     }
 
 }
