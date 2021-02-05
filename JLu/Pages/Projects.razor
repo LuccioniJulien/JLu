@@ -3,13 +3,13 @@
 @inject NavigationManager NavManager
 
 
-<div class=" animate__animated @_classes">
+<div class=" animate__animated @_classeBounceIn">
     <ProjectCard Goto="Goto"/>
 </div>
 
-@if (_id != null)
+@if (_isDetail)
 {
-    <article class="message animate__animated @_classesBack">
+    <article class="message animate__animated @_classesBounceInRight">
         <div class="message-header">
             <p>
                 LOALLllllllllllllllllllllllllllllllllllllllllllllllllllllll
@@ -26,26 +26,27 @@
 }
 
 @code {
-    string _classes = "animate__bounceIn";
-    string _id;
-    string _classesBack = "animate__bounceInRight";
+    string _classeBounceIn = "animate__bounceIn";
+    string _classesBounceInRight = "animate__bounceInRight";
+
+    bool _isDetail;
 
     async void Goto()
     {
-        _classes = "animate__bounceOut";
+        _classeBounceIn = "animate__bounceOut";
         await Task.Delay(500);
-        _classes = "is-hidden";
-        _id = "ok";
+        _classeBounceIn = "is-hidden";
+        _isDetail = true;
         StateHasChanged();
     }
 
     async void BackTo()
     {
-        _classesBack = "animate__bounceOutRight";
+        _classesBounceInRight = "animate__bounceOutRight";
         await Task.Delay(500);
-        _classes = "animate__bounceIn";
-        _id = null;
-        _classesBack = "animate__bounceInRight";
+        _classeBounceIn = "animate__bounceIn";
+        _isDetail = false;
+        _classesBounceInRight = "animate__bounceInRight";
         StateHasChanged();
     }
 
